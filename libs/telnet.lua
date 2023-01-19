@@ -507,6 +507,13 @@ function _T:configure(dohs)
 	tasker:newTask(function()
 		local subnego
 
+		local function setlastkeyandtimestamp(ch)
+			self.lastkey = ch
+			self.lastkeyreceived = os.time()
+		end
+
+		setlastkeyandtimestamp(nil)
+
 		while not self.dead do
 			self.lastkey = nil
 
@@ -533,7 +540,7 @@ function _T:configure(dohs)
 					end
 					local key = keys[act]
 					if key then
-						self.lastkey = key
+						setlastkeyandtimestamp(key)
 					elseif act:byte() == 0x3C then
 						local mouse = self.info.mouse
 						if mouse then
@@ -571,7 +578,7 @@ function _T:configure(dohs)
 					self:debug(('Failed to handle escape sequence: %X'):format(es:byte()))
 				end
 			elseif chb >= 0x21 and chb <= 0x7E then -- ASCII symbols
-				self.lastkey = ch
+				setlastkeyandtimestamp(ch)
 			elseif chb == 0xFF then -- IAC
 				local act = self:read(1)
 
@@ -606,7 +613,7 @@ function _T:configure(dohs)
 			elseif chb ~= 0x0A and chb ~= 0x00 then
 				local key = keys[chb]
 				if key then
-					self.lastkey = key
+					setlastkeyandtimestamp(key)
 				else
 					self:debug(('Unhandled telnet key: %X'):format(chb))
 				end

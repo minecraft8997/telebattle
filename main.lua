@@ -3,6 +3,7 @@ require('libs.sockman')
 tasker = require('libs.tasker')
 telnet = require('libs.telnet')
 ocounter = require('libs.ocounter')
+noafk = require('libs.noafk')
 menu = require('states.menu')
 
 local grevparse = io.popen('git rev-parse --short HEAD', 'r')
@@ -56,6 +57,7 @@ tasker:newTask(function()
 				local tc = telnet.init(cl, true)
 				tc:setHandler(init)
 				ocounter:install(tc)
+				noafk:install(tc)
 			elseif err ~= 'timeout' then
 				run = false
 			end

@@ -235,6 +235,10 @@ function _T:lastInput()
 	return self.lastkey
 end
 
+function _T:getlastkeyreceived()
+	return self.lastkeyreceived
+end
+
 function _T:getDimensions()
 	if not self.modes.naws then
 		return 0, 0

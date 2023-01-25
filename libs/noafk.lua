@@ -1,20 +1,24 @@
-local _A = {}
+local _A = {
+	afktimeout = 600
+}
 
-afktimeout_mins = 1
+function _A:checkidle(me, since)
+	if os.time() - since >= self.afktimeout then
+		me:fullClear()
+		me:send('We haven\'t noticed any actions in ' .. self.afktimeout .. ' second(s)\r\n')
+		me:send('So we consider you are Away From Keyboard')
+		me:close()
+	end
+end
 
 function _A:install(me)
-    tasker:newTask(function()
-        while not me:isBroken() do
+	tasker:newTask(function()
+		while not me:isBroken() do
 			coroutine.yield()
 
-            if os.time() - me.lastkeyreceived >= afktimeout_mins * 60 then
-                me:fullClear()
-                me:send('We haven\'t noticed any actions in ' .. afktimeout_mins .. ' minute(s)\r\n')
-                me:send('So we consider you are Away From Keyboard')
-                me:close()
-            end
+			:checkidle(me, me.getlastkeyreceived())
 		end
-    end)
+	end)
 end
 
 return _A

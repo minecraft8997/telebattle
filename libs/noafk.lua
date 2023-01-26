@@ -16,7 +16,7 @@ function _A:install(me)
 		while not me:isBroken() do
 			coroutine.yield()
 
-			self:checkidle(me, me.getlastkeyreceived())
+			self:checkidle(me, me:getlastkeyreceived())
 		end
 	end)
 end
